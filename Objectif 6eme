@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>École Aventure : Objectif 6ème</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&display=swap');
+        body { font-family: 'Fredoka', sans-serif; background-color: #f0f9ff; }
+        .card-inner { transition: transform 0.6s; transform-style: preserve-3d; cursor: pointer; }
+        .is-flipped { transform: rotateY(180deg); }
+        .card-front, .card-back { backface-visibility: hidden; position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+        .card-back { transform: rotateY(180deg); }
+    </style>
+</head>
+<body class="p-4">
+
+    <header class="max-w-4xl mx-auto flex justify-between items-center bg-white p-4 rounded-2xl shadow-md mb-8">
+        <h1 class="text-2xl font-bold text-indigo-600">🎓 Objectif 6ème</h1>
+        <div class="bg-yellow-400 px-4 py-1 rounded-full font-bold">⭐ <span id="star-count">0</span></div>
+    </header>
+
+    <main class="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6">
+        
+        <section class="bg-white p-6 rounded-3xl shadow-lg border-b-4 border-indigo-200">
+            <h2 class="text-xl font-bold mb-4 flex items-center">
+                <i class="fas fa-lightbulb text-yellow-500 mr-2"></i> Le Quiz du Jour
+            </h2>
+            <div id="quiz-area">
+                <p id="question-text" class="text-lg mb-6">Prête pour le défi ?</p>
+                <div id="options" class="grid grid-cols-1 gap-3">
+                    <button onclick="startQuiz('maths')" class="bg-indigo-500 text-white p-3 rounded-xl hover:bg-indigo-600 transition">Commencer Maths</button>
+                    <button onclick="startQuiz('francais')" class="bg-rose-500 text-white p-3 rounded-xl hover:bg-rose-600 transition">Commencer Français</button>
+                </div>
+            </div>
+        </section>
+
+        <section class="bg-white p-6 rounded-3xl shadow-lg border-b-4 border-green-200">
+            <h2 class="text-xl font-bold mb-4 flex items-center">
+                <i class="fas fa-bolt text-green-500 mr-2"></i> Flashcards Mémoire
+            </h2>
+            <div class="relative w-full h-48">
+                <div id="flashcard" class="card-inner relative w-full h-full text-center" onclick="this.classList.toggle('is-flipped')">
+                    <div class="card-front bg-green-100 rounded-2xl flex items-center justify-center p-4 border-2 border-green-300">
+                        <p class="text-xl font-bold text-green-800">C'est quoi un angle droit ?</p>
+                    </div>
+                    <div class="card-back bg-indigo-600 rounded-2xl flex items-center justify-center p-4 text-white">
+                        <p class="text-xl">Un angle qui mesure précisément 90° !</p>
+                    </div>
+                </div>
+            </div>
+            <p class="text-center mt-4 text-sm text-gray-500">Touche la carte pour voir la réponse</p>
+        </section>
+
+    </main>
+
+    <script>
+        let stars = 0;
+        const database = {
+            maths: [
+                { q: "Combien y a-t-il de millièmes dans une unité ?", a: ["10", "100", "1000"], c: 2 },
+                { q: "Quel est le résultat de 0,5 + 0,7 ?", a: ["1,2", "0,12", "12"], c: 0 }
+            ],
+            francais: [
+                { q: "Dans 'Ils mangent', quelle est la terminaison ?", a: ["-e", "-es", "-ent"], c: 2 }
+            ]
+        };
+
+        function startQuiz(subject) {
+            const quiz = database[subject][0];
+            document.getElementById('question-text').innerText = quiz.q;
+            const optionsDiv = document.getElementById('options');
+            optionsDiv.innerHTML = "";
+            quiz.a.forEach((opt, index) => {
+                const btn = document.createElement('button');
+                btn.className = "bg-slate-100 p-3 rounded-xl hover:bg-indigo-100 text-left px-6";
+                btn.innerText = opt;
+                btn.onclick = () => checkAnswer(index, quiz.c);
+                optionsDiv.appendChild(btn);
+            });
+        }
+
+        function checkAnswer(chosen, correct) {
+            if(chosen === correct) {
+                alert("Bravo ! ⭐");
+                stars += 10;
+                document.getElementById('star-count').innerText = stars;
+            } else {
+                alert("Réessaie encore !");
+            }
+        }
+    </script>
+</body>
+</html>
